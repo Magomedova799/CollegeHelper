@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — CollegeHelper</title>
+    <link rel="stylesheet" href="/static/css/login.css">
+    <script src="/static/js/login.js" defer></script>
+</head>
+<body>
+    <main class="login-container">
+        <section class="login-card">
+            <h1>CollegeHelper</h1>
+            <p class="subtitle">Панель сотрудников колледжа</p>
+
+            <form id="loginForm">
+                <label for="email">Электронная почта</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Введите email"
+                    required
+                >
+
+                <label for="password">Пароль</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Введите пароль"
+                    required
+                >
+
+                <p id="errorMessage" class="error-message"></p>
+
+                <button type="submit" id="loginButton">
+                    Войти
+                </button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,0 +1,735 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CollegeHelper — ИИ-помощник</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --background: #080e1c;
+            --surface: #101a2e;
+            --surface-light: #17243b;
+            --border: rgba(255, 255, 255, 0.09);
+            --text: #f2f6ff;
+            --muted: #8998b3;
+            --blue: #548cff;
+            --cyan: #47d7e8;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 15% 10%, rgba(52, 105, 220, 0.16), transparent 35%),
+                radial-gradient(ellipse at 85% 85%, rgba(37, 190, 205, 0.10), transparent 35%),
+                var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 1000px;
+            height: min(850px, 92vh);
+            min-height: 550px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: rgba(16, 26, 46, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Шапка */
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 28px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.015);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            background: linear-gradient(135deg, #548cff, #35c5df);
+            box-shadow: 0 5px 25px rgba(84, 140, 255, 0.25);
+        }
+
+        .brand h1 {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .online {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #70e2b1;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #50d99b;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(80, 217, 155, 0.6);
+        }
+
+        /* Область чата */
+
+        .chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        .welcome {
+            text-align: center;
+            padding: 28px 15px 20px;
+        }
+
+        .welcome-icon {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(84, 140, 255, 0.2), rgba(71, 215, 232, 0.12));
+            border: 1px solid rgba(84, 140, 255, 0.25);
+        }
+
+        .welcome h2 {
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            max-width: 440px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .suggestions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 23px;
+        }
+
+        .suggestion {
+            padding: 11px 15px;
+            color: #c5d8ff;
+            background: rgba(84, 140, 255, 0.08);
+            border: 1px solid rgba(84, 140, 255, 0.2);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .suggestion:hover {
+            background: rgba(84, 140, 255, 0.2);
+            border-color: var(--blue);
+        }
+
+        /* Сообщения */
+
+        .message-row {
+            display: flex;
+            gap: 11px;
+            align-items: flex-start;
+            animation: appear 0.25s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .avatar {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            background: var(--surface-light);
+        }
+
+        .assistant-avatar {
+            background: linear-gradient(135deg, #548cff, #35c5df);
+        }
+
+        .message-content {
+            max-width: 75%;
+        }
+
+        .message-name {
+            color: var(--muted);
+            font-size: 11px;
+            margin-bottom: 7px;
+        }
+
+        .message {
+            padding: 14px 17px;
+            border-radius: 5px 17px 17px 17px;
+            background: var(--surface-light);
+            color: #e5edfc;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .user-row {
+            flex-direction: row-reverse;
+        }
+
+        .user-row .message-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .user-row .message {
+            background: linear-gradient(135deg, #3975e8, #4266cb);
+            color: white;
+            border-radius: 17px 5px 17px 17px;
+        }
+
+        /* Индикатор печати */
+
+        .typing {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 17px;
+        }
+
+        .typing span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #8ca9e5;
+            animation: bounce 1s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes bounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            30% {
+                transform: translateY(-6px);
+                opacity: 1;
+            }
+        }
+
+        /* Кнопка заявки */
+
+        .request-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 12px 17px;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #3978ed, #36b8d2);
+            transition: 0.2s;
+        }
+
+        .request-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(57, 120, 237, 0.25);
+        }
+
+        .notice {
+            margin-top: 10px;
+            padding: 13px;
+            background: rgba(245, 166, 35, 0.1);
+            border: 1px solid rgba(245, 166, 35, 0.25);
+            color: #ffd28a;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .error {
+            color: #ff9c9c;
+            background: rgba(255, 80, 80, 0.08);
+            border: 1px solid rgba(255, 80, 80, 0.2);
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* Поле ввода */
+
+        .input-area {
+            padding: 20px 28px 23px;
+            border-top: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.015);
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 9px 8px 18px;
+            background: #0b1426;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            transition: 0.2s;
+        }
+
+        .input-box:focus-within {
+            border-color: rgba(84, 140, 255, 0.6);
+            box-shadow: 0 0 0 3px rgba(84, 140, 255, 0.08);
+        }
+
+        .input-box input {
+            flex: 1;
+            min-width: 0;
+            color: white;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .input-box input::placeholder {
+            color: #71809a;
+        }
+
+        .send-button {
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 19px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #548cff, #35bfd8);
+            transition: 0.2s;
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+        }
+
+        .send-button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .footer-note {
+            margin-top: 12px;
+            text-align: center;
+            color: #64738e;
+            font-size: 10px;
+        }
+
+        .chat::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat::-webkit-scrollbar-thumb {
+            background: #30415f;
+            border-radius: 10px;
+        }
+
+        /* Телефоны */
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+
+            .app {
+                height: 100dvh;
+                min-height: 0;
+                border-radius: 0;
+                border: none;
+            }
+
+            .header {
+                padding: 17px 18px;
+            }
+
+            .chat {
+                padding: 20px 16px;
+            }
+
+            .welcome h2 {
+                font-size: 20px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .input-area {
+                padding: 14px 15px 20px;
+            }
+
+            .online {
+                font-size: 10px;
+            }
+
+            .brand h1 {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header class="header">
+        <div class="brand">
+            <div class="logo">✦</div>
+
+            <div>
+                <h1>CollegeHelper</h1>
+                <p>ИИ-помощник колледжа</p>
+            </div>
+        </div>
+
+        <div class="online">
+    <a href="/dashboard">Сотрудник УПК</a>
+</div>
+    </header>
+
+    <main class="chat" id="chat">
+
+        <section class="welcome" id="welcome">
+            <div class="welcome-icon">✦</div>
+
+            <h2>Чем могу помочь?</h2>
+
+            <p>
+                Я помогу разобраться с вопросами об оборудовании,
+                подскажу порядок действий и помогу оформить заявку
+                на устранение неисправности.
+            </p>
+
+            <div class="suggestions">
+                <button class="suggestion" type="button"
+                    data-message="Как подключить ноутбук к проектору?">
+                    🖥 Подключение проектора
+                </button>
+
+                <button class="suggestion" type="button"
+                    data-message="Что делать, если не работает принтер?">
+                    🖨 Проблемы с принтером
+                </button>
+
+                <button class="suggestion" type="button"
+                    data-message="Как оформить заявку?">
+                    📋 Оформление заявки
+                </button>
+            </div>
+        </section>
+
+        <div class="message-row">
+            <div class="avatar assistant-avatar">✦</div>
+
+            <div class="message-content">
+                <div class="message-name">CollegeHelper</div>
+
+                <div class="message">
+                    Здравствуйте! Я цифровой помощник колледжа.
+                    Задайте свой вопрос, и я постараюсь помочь.
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="input-area">
+
+        <form id="chatForm">
+
+            <div class="input-box">
+
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Напишите свой вопрос..."
+                    autocomplete="off"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="send-button"
+                    id="sendButton"
+                    aria-label="Отправить сообщение"
+                >
+                    ↑
+                </button>
+
+            </div>
+
+        </form>
+
+        <p class="footer-note">
+            CollegeHelper · Цифровой помощник колледжа
+        </p>
+
+    </footer>
+
+</div>
+
+<script>
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const welcome = document.getElementById("welcome");
+
+    let isWaiting = false;
+
+    // Сохраняем номер аудитории из QR-кода
+    const params = new URLSearchParams(window.location.search);
+    const locationId = params.get("location_id");
+
+    // Прокрутка к последнему сообщению
+    function scrollToBottom() {
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Добавление сообщения
+    function addMessage(text, sender) {
+        const row = document.createElement("div");
+        row.className = `message-row ${sender === "user" ? "user-row" : ""}`;
+
+        const avatar = document.createElement("div");
+        avatar.className = sender === "user"
+            ? "avatar"
+            : "avatar assistant-avatar";
+
+        avatar.textContent = sender === "user" ? "👤" : "✦";
+
+        const content = document.createElement("div");
+        content.className = "message-content";
+
+        const name = document.createElement("div");
+        name.className = "message-name";
+        name.textContent = sender === "user" ? "Вы" : "CollegeHelper";
+
+        const message = document.createElement("div");
+        message.className = "message";
+        message.textContent = text;
+
+        content.appendChild(name);
+        content.appendChild(message);
+
+        row.appendChild(avatar);
+        row.appendChild(content);
+
+        chat.appendChild(row);
+
+        scrollToBottom();
+
+        return content;
+    }
+
+    // Индикатор ожидания
+    function showTyping() {
+        const content = addMessage("", "assistant");
+
+        const typing = document.createElement("div");
+        typing.className = "typing";
+        typing.innerHTML = "<span></span><span></span><span></span>";
+
+        content.querySelector(".message").appendChild(typing);
+
+        return content.parentElement;
+    }
+
+    // Отправка сообщения
+    async function sendMessage(message) {
+        if (isWaiting || !message.trim()) return;
+
+        welcome.style.display = "none";
+
+        isWaiting = true;
+        sendButton.disabled = true;
+        input.disabled = true;
+
+        addMessage(message, "user");
+
+        const typingElement = showTyping();
+
+        try {
+            const response = await fetch("/assistant/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.detail || "Не удалось получить ответ от помощника."
+                );
+            }
+
+            typingElement.remove();
+
+            const assistantContent = addMessage(
+                data.answer || "Не удалось сформировать ответ.",
+                "assistant"
+            );
+
+            // Если ИИ предлагает оформить заявку
+if (data.suggest_create_request) {
+    const link = document.createElement("a");
+    link.className = "request-link";
+    link.href = "/tickets/create";
+    link.textContent = "📋 Оформить заявку";
+
+    assistantContent.appendChild(link);
+}
+
+            // Если обнаружена опасная ситуация
+            if (data.type === "danger") {
+                const warning = document.createElement("div");
+                warning.className = "notice";
+
+                warning.textContent =
+                    "⚠️ Не пользуйтесь этим оборудованием. Отойдите от него и сообщите ответственному сотруднику колледжа.";
+
+                assistantContent.appendChild(warning);
+            }
+
+        } catch (error) {
+            typingElement.remove();
+
+            const content = addMessage(
+                "Не удалось получить ответ. Проверьте подключение и попробуйте ещё раз.",
+                "assistant"
+            );
+
+            const errorBlock = document.createElement("div");
+            errorBlock.className = "error";
+            errorBlock.textContent = error.message;
+
+            content.appendChild(errorBlock);
+
+        } finally {
+            isWaiting = false;
+            sendButton.disabled = false;
+            input.disabled = false;
+            input.focus();
+
+            scrollToBottom();
+        }
+    }
+
+    // Отправка через форму
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const message = input.value.trim();
+
+        if (!message || isWaiting) return;
+
+        input.value = "";
+
+        await sendMessage(message);
+    });
+
+    // Быстрые вопросы
+    document.querySelectorAll(".suggestion").forEach(button => {
+        button.addEventListener("click", () => {
+            sendMessage(button.dataset.message);
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CollegeHelper — Панель сотрудника</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">C</div>
+            <div>
+                <h2>College<span>Helper</span></h2>
+                <small>Платформа колледжа</small>
+            </div>
+        </div>
+
+        <div class="menu-title">МЕНЮ</div>
+
+        <nav>
+            <a href="/dashboard" class="nav-item active">
+                <span>▦</span> Главная
+            </a>
+            <a href="#tickets" class="nav-item">
+                <span>▤</span> Все заявки
+            </a>
+            <a href="/assistant/" class="nav-item">
+    <span>✧</span> AI-помощник
+</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="profile">
+                <div class="avatar" id="user-avatar">С</div>
+                <div>
+                    <strong id="user-name">Сотрудник</strong>
+                    <small>Сотрудник УПК</small>
+                </div>
+            </div>
+            <button class="logout-btn" id="logout-btn">Выйти из аккаунта</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Панель управления</h1>
+                <p>Добро пожаловать в систему CollegeHelper</p>
+            </div>
+            <div class="topbar-right">
+                <span class="status-indicator"></span>
+                Система активна
+            </div>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <span class="welcome-label">РАБОЧЕЕ ПРОСТРАНСТВО</span>
+                <h2>Управление заявками</h2>
+                <p>Контролируйте обращения и следите за их выполнением.</p>
+            </div>
+            <div class="welcome-icon">▤</div>
+        </section>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Всего заявок</span>
+                    <span class="stat-icon blue">▤</span>
+                </div>
+                <h2 id="total-count">—</h2>
+                <small>Все обращения</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Новые</span>
+                    <span class="stat-icon purple">✦</span>
+                </div>
+                <h2 id="new-count">—</h2>
+                <small>Ожидают обработки</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>В процессе</span>
+                    <span class="stat-icon orange">◷</span>
+                </div>
+                <h2 id="progress-count">—</h2>
+                <small>Находятся в работе</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Решены</span>
+                    <span class="stat-icon green">✓</span>
+                </div>
+                <h2 id="resolved-count">—</h2>
+                <small>Успешно завершены</small>
+            </div>
+
+        </section>
+
+        <section class="tickets-section" id="tickets">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Последние заявки</h2>
+                    <p>Список обращений студентов колледжа</p>
+                </div>
+                <button class="refresh-btn" id="refresh-btn">↻ Обновить</button>
+            </div>
+
+            <div class="filters">
+                <input
+                    type="search"
+                    id="search-input"
+                    placeholder="Поиск по названию заявки..."
+                >
+
+                <select id="status-filter">
+                    <option value="">Все статусы</option>
+                    <option value="Новая">Новая</option>
+                    <option value="В процессе">В процессе</option>
+                    <option value="Решена">Решена</option>
+                    <option value="Отклонена">Отклонена</option>
+                </select>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Название заявки</th>
+                            <th>Категория</th>
+                            <th>Место</th>
+                            <th>Дата</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tickets-body">
+                        <tr>
+                            <td colspan="6" class="loading">
+                                Загружаем заявки...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <span id="tickets-info">Загрузка данных...</span>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>

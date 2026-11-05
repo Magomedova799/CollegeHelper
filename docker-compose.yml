@@ -1,0 +1,39 @@
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: college_helper_db
+    restart: always
+    environment:
+      POSTGRES_DB: college_helper
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d college_helper"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: college_helper_api
+    restart: always
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://admin:admin123@db:5432/college_helper
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/code
+
+volumes:
+  postgres_data:

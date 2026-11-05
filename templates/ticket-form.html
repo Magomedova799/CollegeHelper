@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заявки — CollegeHelper</title>
+    <link rel="stylesheet" href="/static/css/ticket-form.css">
+</head>
+<body>
+
+    <main class="page-container">
+
+        <section class="form-card">
+
+            <div class="form-heading">
+                
+                <h1>Создать заявку</h1>
+                <p>Опишите проблему, и сотрудники колледжа помогут её решить.</p>
+            </div>
+
+            {% if room_number %}
+            <div class="room-info">
+                Аудитория: <strong>{{ room_number }}</strong>
+            </div>
+            {% else %}
+            <div class="room-info">
+                Заявка без привязки к аудитории
+            </div>
+            {% endif %}
+
+            <form
+                id="ticketForm"
+                data-location-id="{{ location_id if location_id is not none else '' }}"
+            >
+
+                <label for="title">Название проблемы</label>
+                <input
+                    id="title"
+                    name="title"
+                    type="text"
+                    placeholder="Например, не работает освещение"
+                    required
+                    minlength="3"
+                    maxlength="200"
+                >
+
+                <label for="description">Описание проблемы</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Подробно опишите, что произошло..."
+                    required
+                    minlength="3"
+                ></textarea>
+
+                <label for="category">Категория проблемы</label>
+                <select id="category" name="category_id">
+                    <option value="">Выберите категорию</option>
+
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+
+                </select>
+
+                <button type="submit" id="submit-btn">
+                    Отправить заявку
+                </button>
+
+            </form>
+
+            <p id="result"></p>
+
+            <div class="assistant-link">
+                <span>Нужна помощь с описанием проблемы?</span>
+                <a href="{{ assistant_url }}">
+                    Перейти к ИИ-помощнику →
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="/static/js/ticket-form.js"></script>
+
+</body>
+</html>

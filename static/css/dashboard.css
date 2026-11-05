@@ -1,0 +1,504 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --background: #080e1c;
+    --sidebar: #0c1425;
+    --card: #101a2e;
+    --border: #202c43;
+    --text: #edf3ff;
+    --muted: #8492aa;
+    --blue: #398bff;
+    --cyan: #35d5dc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Боковое меню */
+
+.sidebar {
+    width: 255px;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+    padding: 28px 18px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 55px;
+    padding-left: 8px;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #398bff, #35d5dc);
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.logo h2 {
+    font-size: 19px;
+}
+
+.logo h2 span {
+    color: var(--cyan);
+}
+
+.logo small {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.menu-title {
+    color: #63718a;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding-left: 12px;
+    margin-bottom: 15px;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    transition: .2s;
+}
+
+.nav-item span {
+    font-size: 19px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: #172b49;
+    color: #65b8ff;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+.profile {
+    border-top: 1px solid var(--border);
+    padding-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    background: #193b64;
+    color: #70c6ff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+}
+
+.profile strong {
+    display: block;
+    font-size: 12px;
+}
+
+.profile small {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.logout-btn {
+    width: 100%;
+    margin-top: 18px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 11px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    color: #ff7777;
+    border-color: #ff7777;
+}
+
+/* Основная область */
+
+.main-content {
+    flex: 1;
+    padding: 35px 42px;
+    min-width: 0;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+}
+
+.topbar h1 {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.topbar p,
+.section-heading p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #8fa2bb;
+    font-size: 12px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    background: #32d69a;
+    border-radius: 50%;
+}
+
+/* Приветственный блок */
+
+.welcome {
+    background: linear-gradient(110deg, #122b4c, #10223c, #12323d);
+    border: 1px solid #244364;
+    border-radius: 15px;
+    padding: 27px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.welcome-label {
+    color: #65c9e8;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.welcome h2 {
+    font-size: 23px;
+    margin: 12px 0 8px;
+}
+
+.welcome p {
+    color: #a3b8d1;
+    font-size: 13px;
+}
+
+.welcome-icon {
+    font-size: 65px;
+    color: #63c4e6;
+    opacity: .65;
+}
+
+/* Статистика */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 17px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 21px;
+    transition: .2s;
+}
+
+.stat-card:hover {
+    border-color: #365a82;
+    transform: translateY(-2px);
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #a1aec2;
+    font-size: 12px;
+}
+
+.stat-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    font-size: 17px;
+}
+
+.blue { background: #193a65; color: #62aaff; }
+.purple { background: #30245c; color: #ae91ff; }
+.orange { background: #4b3420; color: #ffb66d; }
+.green { background: #174333; color: #55dfa1; }
+
+.stat-card h2 {
+    font-size: 30px;
+    margin: 17px 0 7px;
+}
+
+.stat-card small {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+/* Таблица */
+
+.tickets-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.section-heading h2 {
+    font-size: 17px;
+    margin-bottom: 7px;
+}
+
+.refresh-btn {
+    background: #183b62;
+    border: 1px solid #28537d;
+    color: #85c8ff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.refresh-btn:hover {
+    background: #22517f;
+}
+
+.filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.filters input,
+.filters select {
+    background: #0b1424;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    border-radius: 8px;
+    outline: none;
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.filters input {
+    flex: 1;
+    min-width: 0;
+}
+
+.filters input:focus,
+.filters select:focus {
+    border-color: var(--blue);
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    color: #8291a9;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 16px 12px;
+    font-size: 12px;
+    border-bottom: 1px solid #1d2a3e;
+    color: #c4cee0;
+}
+
+tbody tr:hover {
+    background: #142239;
+}
+
+.ticket-title {
+    color: #e5efff;
+    font-weight: 600;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status-new {
+    background: #252d58;
+    color: #a7aaff;
+}
+
+.status-progress {
+    background: #49351f;
+    color: #ffc47d;
+}
+
+.status-resolved {
+    background: #174332;
+    color: #6de4a9;
+}
+
+.status-rejected {
+    background: #4a252e;
+    color: #ff929d;
+}
+
+.loading,
+.empty {
+    text-align: center;
+    padding: 35px;
+    color: var(--muted);
+}
+
+.table-footer {
+    padding-top: 18px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+/* Адаптация */
+
+@media (max-width: 1100px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .main-content {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 700px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .logo {
+        margin-bottom: 20px;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .main-content {
+        padding: 20px 14px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .topbar h1 {
+        font-size: 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    .welcome {
+        padding: 20px;
+    }
+
+    .welcome-icon {
+        display: none;
+    }
+
+    .tickets-section {
+        padding: 15px;
+    }
+
+    .filters {
+        flex-direction: column;
+    }
+}
